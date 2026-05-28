@@ -1,4 +1,4 @@
-import { and, eq, sql, desc, count, type SQL } from 'drizzle-orm';
+import { and, eq, sql, count, type SQL } from 'drizzle-orm';
 import { db } from '../../db/index.js';
 import { salons } from '../../db/schema.js';
 import type { SalonListQuery } from './salons.schema.js';
