@@ -54,8 +54,10 @@ const start = async () => {
       port: config.PORT,
       host: '0.0.0.0', // Allow connections in docker environment
     });
-    console.log(`🚀 Server listening at ${address}`);
-    console.log(`📖 Swagger API Docs available at http://localhost:${config.PORT}/docs`);
+    fastify.log.info(`🚀 Server listening at ${address}`);
+    fastify.log.info(
+      `📖 Swagger API Docs available at http://localhost:${config.PORT}/docs`,
+    );
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
