@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "prepare": "husky",
+    "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

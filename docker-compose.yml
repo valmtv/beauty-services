@@ -24,7 +24,7 @@ services:
     environment:
       PORT: 3001
       NODE_ENV: ${NODE_ENV:-development}
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-beauty_services}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-beauty_services}
       POSTGRES_PORT: ${POSTGRES_PORT:-5432}
       IS_DOCKER: 'true'
     depends_on:

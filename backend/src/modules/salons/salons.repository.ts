@@ -1,4 +1,4 @@
-import { and, eq, sql, desc, count } from 'drizzle-orm';
+import { and, eq, sql, count, type SQL } from 'drizzle-orm';
 import { db } from '../../db/index.js';
 import { salons } from '../../db/schema.js';
 import type { SalonListQuery } from './salons.schema.js';
@@ -6,7 +6,7 @@ import type { SalonListQuery } from './salons.schema.js';
 export class SalonsRepository {
   async findAndCount(query: SalonListQuery) {
     const { district, search, page, limit } = query;
-    const conditions = [];
+    const conditions: SQL[] = [];
 
     if (district) {
       conditions.push(eq(salons.district, district));
