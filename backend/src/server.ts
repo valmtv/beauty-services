@@ -9,6 +9,7 @@ import { corsPlugin } from './plugins/cors.plugin.js';
 import { swaggerPlugin } from './plugins/swagger.plugin.js';
 
 import { z } from 'zod';
+import { salonRoutes } from './modules/salons/salons.routes.js';
 
 const fastify = Fastify({
   logger:
@@ -31,6 +32,9 @@ fastify.setSerializerCompiler(serializerCompiler);
 // Register core plugins
 await fastify.register(corsPlugin);
 await fastify.register(swaggerPlugin);
+
+// Register application routes
+await fastify.register(salonRoutes);
 
 // Standard healthcheck route
 fastify.get(
@@ -58,9 +62,7 @@ const start = async () => {
       host: '0.0.0.0', // Allow connections in docker environment
     });
     fastify.log.info(`🚀 Server listening at ${address}`);
-    fastify.log.info(
-      `📖 Swagger API Docs available at http://localhost:${config.PORT}/docs`,
-    );
+    fastify.log.info(`📖 Swagger API Docs available at http://localhost:${config.PORT}/docs`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
