@@ -31,7 +31,11 @@ export class SalonsRepository {
       .from(salons)
       .where(whereClause)
       // High-quality sorting: highest rating first, fallback to highest review count, then id
-      .orderBy(desc(salons.rating), desc(salons.reviewCount), salons.id)
+      .orderBy(
+        sql`${salons.rating} desc nulls last`,
+        sql`${salons.reviewCount} desc nulls last`,
+        salons.id,
+      )
       .limit(limit)
       .offset((page - 1) * limit);
 
