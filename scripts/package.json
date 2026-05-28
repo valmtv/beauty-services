@@ -1,0 +1,21 @@
+{
+  "name": "beauty-services-scripts",
+  "version": "1.0.0",
+  "description": "Data collection and seeding scripts for Warsaw Beauty Salon Explorer",
+  "type": "module",
+  "scripts": {
+    "collect": "tsx src/collect.ts",
+    "seed": "tsx src/seed.ts"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
