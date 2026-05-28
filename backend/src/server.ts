@@ -11,14 +11,17 @@ import { swaggerPlugin } from './plugins/swagger.plugin.js';
 import { z } from 'zod';
 
 const fastify = Fastify({
-  logger: {
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        colorize: true,
-      },
-    },
-  },
+  logger:
+    config.NODE_ENV !== 'production'
+      ? {
+          transport: {
+            target: 'pino-pretty',
+            options: {
+              colorize: true,
+            },
+          },
+        }
+      : true,
 }).withTypeProvider<ZodTypeProvider>();
 
 // Setup Zod Validation compilers
