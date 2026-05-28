@@ -21,7 +21,7 @@ if (!connectionString) {
 // Security: Check if running locally on host and URL references the docker container service name.
 // When running scripts on the host, the "postgres" host (within docker network) is not resolvable.
 // Translate the service name to localhost and the container port 5432 to POSTGRES_PORT (e.g., 5433).
-if (connectionString.includes('@postgres:5432')) {
+if (process.env['IS_DOCKER'] !== 'true' && connectionString.includes('@postgres:5432')) {
   const hostPort = process.env['POSTGRES_PORT'] || '5432';
   console.log(
     `🔌 Translating container connection URL to localhost:${hostPort} for local execution`,

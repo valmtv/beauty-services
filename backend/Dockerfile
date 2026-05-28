@@ -3,31 +3,39 @@ FROM node:24-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies first for better caching
+# Copy root lock and package files for workspaces setup
 COPY package*.json ./
-RUN npm ci
+COPY backend/package*.json ./backend/
 
-# Copy tsconfig and source code
-COPY tsconfig.json ./
-COPY src ./src
+# Install workspaces dependencies for the backend, ignoring hooks/scripts (e.g. husky)
+RUN npm ci --ignore-scripts --workspace=beauty-services-backend
 
-# Build production distribution
-RUN npm run build
+# Copy backend tsconfig and source
+COPY backend/tsconfig.json ./backend/
+COPY backend/src ./backend/src
+
+# Compile backend
+RUN npm run build --workspace=beauty-services-backend
 
 # Stage 2: Runtime
 FROM node:24-alpine
 
 WORKDIR /app
 
+# Copy root lock and package files for runtime setup
 COPY package*.json ./
-RUN npm ci --omit=dev
+COPY backend/package*.json ./backend/
 
-# Copy compiled code from builder
-COPY --from=builder /app/dist ./dist
+# Install only production dependencies for the backend, ignoring hooks/scripts
+RUN npm ci --omit=dev --ignore-scripts --workspace=beauty-services-backend
+
+# Copy built code from the builder stage
+COPY --from=builder /app/backend/dist ./backend/dist
 
 # Standard backend API port
 EXPOSE 3001
 
 ENV NODE_ENV=production
 
-CMD ["node", "dist/server.js"]
+# Run backend start command using workspaces
+CMD ["npm", "start", "--workspace=beauty-services-backend"]

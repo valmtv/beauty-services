@@ -17,8 +17,8 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     ports:
       - '3001:3001'
     environment:
@@ -26,6 +26,7 @@ services:
       NODE_ENV: ${NODE_ENV:-development}
       DATABASE_URL: ${DATABASE_URL}
       POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      IS_DOCKER: 'true'
     depends_on:
       postgres:
         condition: service_healthy

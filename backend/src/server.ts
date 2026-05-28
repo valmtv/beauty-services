@@ -13,7 +13,7 @@ import { salonRoutes } from './modules/salons/salons.routes.js';
 
 const fastify = Fastify({
   logger:
-    config.NODE_ENV !== 'production'
+    config.NODE_ENV !== 'production' && !config.IS_DOCKER
       ? {
           transport: {
             target: 'pino-pretty',
