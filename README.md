@@ -17,27 +17,59 @@ A premium full-stack monorepo application to explore, filter, and edit beauty sa
 # 1. Clone environment variables
 cp .env.example .env
 
-# 2. Spin up containers (PostgreSQL database + Fastify API + Next.js App)
+# 2. Install monorepo dependencies locally
+npm install
+
+# 3. Spin up PostgreSQL database & web containers in background
 docker compose up -d
 
-# 3. Create and push schemas to PostgreSQL
+# 4. WAIT 5 seconds for PostgreSQL to finish internal initialization!
+# (Running database migrations before PostgreSQL is healthy will throw connection errors)
+sleep 5
+
+# 5. Create and push schemas to PostgreSQL
 npm run db:push -w backend
 
-# 4. Seed database with 147 real pre-collected Warsaw salons (no API key needed!)
+# 6. Seed database with 1,392 real Warsaw salons (no Google API key needed!)
 npm run seed -w scripts
 ```
 
 ### Application URLs
 
-- **Web Application:** [http://localhost:3000](http://localhost:3000)
+- **Web UI Dashboard:** [http://localhost:3000](http://localhost:3000)
 - **REST API Server:** [http://localhost:3001](http://localhost:3001)
 - **Interactive Swagger UI:** [http://localhost:3001/docs](http://localhost:3001/docs)
 
 ---
 
-## 🚀 Core Features
+## 📡 Live Google Places API Data Collection (Optional)
 
-- **Split-Panel Layout:** Desktop split panel showing interactive Leaflet maps on the right and paginated card listings on the left.
+The monorepo contains a data collection script under [`scripts/src/collect.ts`](file:///Users/omatviiv/try/SumUp/beauty-services/scripts/src/collect.ts) that queries the **official Google Places API directly** (Nearby Search + Place Details endpoints) to fetch live records.
+
+> [!IMPORTANT]
+> Google requires a valid credit card or billing profile to query the Places API. You must register billing details at [https://console.cloud.google.com/](https://console.cloud.google.com/) before accessing these services.
+
+### API Credentials Setup
+
+1. **Create GCP Project:** Go to the [Google Cloud Console](https://console.cloud.google.com/), log in, and create a new project.
+2. **Enable Billing:** Enable active billing on your project in the sidebar menu.
+3. **Enable Places API:** Navigate to **APIs & Services > Library**, search for **Places API**, and click **Enable**.
+4. **Generate API Key:** Under **APIs & Services > Credentials**, click **Create Credentials** and copy the generated **API Key**.
+5. **Configure Environment:** Assign the key in your root `.env` file:
+   ```env
+   GOOGLE_PLACES_API_KEY=your_copied_api_key
+   ```
+6. **Run Live Collector:**
+   ```bash
+   npm run collect -w scripts
+   ```
+
+---
+
+## 🚀 Key Features
+
+- **Split-Panel Dashboard:** Desktop views feature card listings on the left and interactive Leaflet maps on the right.
+- **Mobile-Responsive Adaptability:** Pivots to single-column swipe navigation tabs on mobile screens, utilizing a custom CSS Flexbox height constraint to ensure independent card scrollability.
 - **Bidirectional Map Synchronization:**
   - Click a list card $\rightarrow$ pans and zooms the map to its custom marker pin with active pulse animations.
   - Click a map pin $\rightarrow$ expands the list card and scrolls it smoothly into view.
