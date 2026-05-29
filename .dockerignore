@@ -1,0 +1,11 @@
+node_modules
+**/node_modules
+.next
+**/out
+.git
+.github
+backend/dist
+.env
+.env.local
+drizzle
+*.log
