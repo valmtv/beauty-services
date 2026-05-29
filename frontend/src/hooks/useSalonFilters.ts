@@ -6,9 +6,10 @@ import { MapBounds } from '../components/MapViewInner';
 
 interface UseSalonFiltersProps {
   salons: Salon[];
+  bypassMapBounds?: boolean;
 }
 
-export function useSalonFilters({ salons }: UseSalonFiltersProps) {
+export function useSalonFilters({ salons, bypassMapBounds = false }: UseSalonFiltersProps) {
   const [selectedPriceLevels, setSelectedPriceLevels] = useState<number[]>([]);
   const [minRating, setMinRating] = useState<number>(0);
   const [onlyWithRatings, setOnlyWithRatings] = useState<boolean>(true);
@@ -43,7 +44,7 @@ export function useSalonFilters({ salons }: UseSalonFiltersProps) {
     }
 
     // C. Filter by Map Viewport Bounds
-    if (mapBounds && isSearchAsMoveEnabled) {
+    if (mapBounds && isSearchAsMoveEnabled && !bypassMapBounds) {
       const lat = parseFloat(salon.lat);
       const lng = parseFloat(salon.lng);
       if (!isNaN(lat) && !isNaN(lng)) {

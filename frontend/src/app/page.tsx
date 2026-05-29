@@ -32,15 +32,28 @@ export default function Home() {
     setSelectedDistrict,
   } = useSalonsData();
 
-  const filters = useSalonFilters({ salons });
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px)');
+    setIsMobile(media.matches);
+    const listener = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    media.addEventListener('change', listener);
+    return () => media.removeEventListener('change', listener);
+  }, []);
+
+  // View state for mobile screens (Toggle list vs map)
+  const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
+
+  const filters = useSalonFilters({
+    salons,
+    bypassMapBounds: isMobile && activeTab === 'list',
+  });
   const { setPage, isSearchAsMoveEnabled } = filters;
 
   // Sync state between Map and List
   const [focusedSalon, setFocusedSalon] = useState<Salon | null>(null);
   const [expandedSalonId, setExpandedSalonId] = useState<number | null>(null);
-
-  // View state for mobile screens (Toggle list vs map)
-  const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
 
   const listContainerRef = useRef<HTMLDivElement>(null);
 
@@ -125,7 +138,7 @@ export default function Home() {
       <main className="flex-1 flex flex-col md:flex-row overflow-hidden relative z-10">
         {/* Left Side: Filter, Card list, Pagination */}
         <section
-          className={`w-full md:w-[560px] lg:w-[620px] flex flex-col shrink-0 overflow-hidden border-r border-border-main bg-background-app ${
+          className={`w-full md:w-[560px] lg:w-[620px] flex flex-col flex-1 md:shrink-0 overflow-hidden border-r border-border-main bg-background-app ${
             activeTab === 'list' ? 'flex' : 'hidden md:flex'
           }`}
         >
