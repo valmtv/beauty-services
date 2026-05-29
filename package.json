@@ -2,6 +2,7 @@
   "name": "beauty-services-monorepo",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "workspaces": [
     "backend",
     "frontend",
@@ -25,7 +26,15 @@
     "typescript-eslint": "^8.59.0"
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,jsx,mjs,cjs}": [
+    "backend/**/*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "frontend/**/*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "npx --prefix frontend eslint --fix",
+      "prettier --write"
+    ],
+    "scripts/**/*.{ts,tsx,js,jsx,mjs,cjs}": [
       "eslint --fix",
       "prettier --write"
     ],

@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background-app: var(--bg-app);
+  --color-background-card: var(--bg-card);
+  --color-background-card-hover: var(--bg-card-hover);
+  --color-border-main: var(--border-main);
+  --color-text-main: var(--text-main);
+  --color-text-second: var(--text-second);
+  --color-text-muted: var(--text-muted);
+  
+  --color-accent-emerald: #10b981;
+  --color-accent-indigo: #6366f1;
+}
+
+/* Light Theme Variables */
+:root {
+  --bg-app: #f8fafc; /* slate-50 */
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card-hover: rgba(255, 255, 255, 0.98);
+  --border-main: rgba(15, 23, 42, 0.08);
+  --text-main: #0f172a; /* slate-900 */
+  --text-second: #334155; /* slate-700 */
+  --text-muted: #64748b; /* slate-500 */
+}
+
+/* Dark Theme Variables */
+:root.dark {
+  --bg-app: #0a0f1d;
+  --bg-card: rgba(19, 27, 46, 0.55);
+  --bg-card-hover: rgba(28, 39, 66, 0.7);
+  --border-main: rgba(255, 255, 255, 0.07);
+  --text-main: #f8fafc; /* slate-50 */
+  --text-second: #94a3b8; /* slate-400 */
+  --text-muted: #64748b; /* slate-500 */
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-app);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-main);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+
+/* Glassmorphism panel styles */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-main);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-main);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.12);
+  transform: translateY(-1.5px);
+}
+
+/* Pulsing animated map marker */
+@keyframes marker-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.6);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+.pulse-marker {
+  animation: marker-pulse 2s infinite;
+}
+
+/* Shimmer Loading Skeleton Animation */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-loader {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--border-main);
+}
+
+.shimmer-loader::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.03) 20%,
+    rgba(255, 255, 255, 0.08) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 2s infinite;
+  content: '';
+}
+
+/* Hide Leaflet controls standard styling */
+.leaflet-container {
+  font-family: inherit !important;
+  background: var(--bg-app) !important;
+  transition: background-color 0.3s ease;
+}
+
+.leaflet-bar {
+  border: 1px solid var(--border-main) !important;
+  box-shadow: none !important;
+}
+
+.leaflet-bar a {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border-bottom: 1px solid var(--border-main) !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: var(--bg-card-hover) !important;
+  color: #6366f1 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-main);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-card) !important;
+}

@@ -19,17 +19,42 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+      target: builder
     ports:
       - '3001:3001'
     environment:
       PORT: 3001
-      NODE_ENV: ${NODE_ENV:-development}
+      NODE_ENV: development
       DATABASE_URL: postgresql://${POSTGRES_USER:-beauty_services}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-beauty_services}
       POSTGRES_PORT: ${POSTGRES_PORT:-5432}
       IS_DOCKER: 'true'
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/backend/node_modules
+    command: npm run dev --workspace=beauty-services-backend
     depends_on:
       postgres:
         condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      target: builder
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/frontend/node_modules
+    command: npm run dev --workspace=frontend
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
