@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: beauty_services
+          POSTGRES_USER: beauty_services
+          POSTGRES_PASSWORD: changeme
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint & Typecheck Backend
+        run: |
+          npm run typecheck -w backend
+          npm run lint -w backend
+
+      - name: Build Backend
+        run: npm run build -w backend
+
+      - name: Lint & Typecheck Frontend
+        run: |
+          npm run typecheck -w frontend
+          npm run lint -w frontend
+
+      - name: Build Frontend
+        run: npm run build -w frontend
+
+      - name: Verify DB Migrations & Seeding Script
+        run: |
+          npm run db:push -w backend
+          npm run seed -w scripts
+        env:
+          DATABASE_URL: postgresql://beauty_services:changeme@localhost:5432/beauty_services
