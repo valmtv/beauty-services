@@ -125,7 +125,7 @@ export default function Home() {
       <main className="flex-1 flex flex-col md:flex-row overflow-hidden relative z-10">
         {/* Left Side: Filter, Card list, Pagination */}
         <section
-          className={`w-full md:w-[460px] lg:w-[500px] flex flex-col shrink-0 overflow-hidden border-r border-border-main bg-background-app ${
+          className={`w-full md:w-[560px] lg:w-[620px] flex flex-col shrink-0 overflow-hidden border-r border-border-main bg-background-app ${
             activeTab === 'list' ? 'flex' : 'hidden md:flex'
           }`}
         >
